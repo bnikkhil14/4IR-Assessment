@@ -1,0 +1,5 @@
+encryptionsalt: v1:lDCRMJBq5Hg=:v1:AzZtgPIgzj9xUEuH:fpPy3q9bxDeBjix8Lc1VyKGvMZ4PXw==
+config:
+  kubernetes:context: docker-desktop
+  guestbook-monitoring:grafanaPassword:
+    secure: v1:SBxpWkJ6GyVAsQBj:2WTqdbyBgaufWNrLTAQbHrhOtGJ65AszZ5EQk8oprg==
