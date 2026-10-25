@@ -1,6 +1,15 @@
 # 4IR-Assessment
 Deploy Guestbook application with Prometheus and Grafana monitoring
 
+## Documentation
+
+This repository includes three documentation files covering environment setup, application deployment, and post-deployment validation.
+
+- `README.md` — Main project documentation covering the architecture, deployment steps using Pulumi, application access, monitoring configuration, and troubleshooting.
+- `Setup_README.md` — Prerequisites, required tools, installation instructions, and local environment configuration for running the application on Windows 11 using Docker Desktop Kubernetes.
+
+# Complete the environment setup described in `Setup_README.md`, follow this README to deploy the application, and refer to `Validation_README.md` for verification steps and test results.
+
 ## Objective and scope
 - Deploy a sample Guestbook web application to a local Kubernetes cluster using Pulumi infrastructure as code (IaC).
 - Provide a Redis leader with two replicas, expose the frontend, and install an observability stack comprising Prometheus, Grafana, Redis Exporter, Blackbox Exporter, and a custom Grafana dashboard. Verify readiness, functional behavior, replication, and telemetry.

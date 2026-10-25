@@ -1,0 +1,53 @@
+## Environment Setup Guide
+
+# Overview
+
+- This document outlines the prerequisites, required tools, installation instructions, and configuration steps for deploying the Kubernetes Guestbook application with Prometheus and Grafana monitoring using Pulumi.
+- The instructions are intended for a `Windows 11` environment using `Docker Desktop's local Kubernetes cluster`
+- For application deployment instructions, refer to `README.md`
+
+## Tools and prerequisites
+
+## Tool	                                                      Purpose / verification
+____________________________________________________________________________________________________________________
+1. Windows 11 + PowerShell 	                      Local host and command terminal
+2. Docker Desktop	                              Container runtime and local Kubernetes cluster; docker version
+3. Kubernetes (enabled in Docker Desktop)	      Local cluster; kubectl cluster-info
+4. kubectl	                                      Manage/inspect Kubernetes resources; kubectl version --client
+5. Node.js + npm (LTS)	                          Run TypeScript Pulumi project; node -v; npm -v
+6. Pulumi CLI	                                  IaC preview/deployment/state; pulumi version
+7. VS Code              	                      Edit project files and use integrated terminal
+8. Git              	                          Version-control source and submit repository; git --version
+
+Version notes: the recorded test environment used Docker Desktop with Docker 29.9.1. Exact tool versions can differ; use current compatible stable releases. Helm CLI is optional because Pulumi Kubernetes provider installs Helm charts directly. A cloud account is not required for this local deployment.
+
+## Fresh machine setup
+## Install Docker Desktop and enable Kubernetes
+- Install Docker Desktop for Windows and complete its WSL 2 prerequisites if prompted. Restart if required.
+- Start Docker Desktop and wait until the engine reports running.
+- In Docker Desktop Settings → Kubernetes, enable Kubernetes (wording varies by version); apply and wait for cluster readiness.
+- Select the Docker Desktop Kubernetes context if necessary. 
+
+    `docker version`
+    `docker info`
+    `kubectl config get-contexts`
+    `kubectl config current-context`
+    `kubectl cluster-info`
+    `kubectl get nodes`
+
+Expected: a reachable local cluster and Ready nodes. Docker Desktop may run a multi-node local cluster, depending on its configuration.
+
+## Install Node.js, Pulumi, and editor
+- Install a supported Node.js LTS release, VS Code, and Git.
+- Install the `Pulumi CLI` using its official installation instructions: https://www.pulumi.com/docs/iac/download-install/
+
+    `node --version`
+    `npm --version`
+    `pulumi version`
+    `git --version`
+
+Installation references: 
+`Docker`        --> https://docs.docker.com/desktop/
+`node.js`       --> https://nodejs.org/
+`Kubernetes`    --> https://kubernetes.io/docs/tasks/tools/
+`Pulumi`        --> https://www.pulumi.com/docs/
