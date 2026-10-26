@@ -7,6 +7,7 @@ This repository includes three documentation files covering environment setup, a
 
 - `README.md` — Main project documentation covering the architecture, deployment steps using Pulumi, application access, monitoring configuration, and troubleshooting.
 - `Setup_README.md` — Prerequisites, required tools, installation instructions, and local environment configuration for running the application on Windows 11 using Docker Desktop Kubernetes.
+- `Validation_README.md` — Post-deployment verification steps, observed results, Redis replication testing, application functionality checks, and Prometheus/Grafana monitoring validation.
 
 # Complete the environment setup described in `Setup_README.md`, follow this README to deploy the application, and refer to `Validation_README.md` for verification steps and test results.
 

@@ -1,0 +1,88 @@
+## Overview
+
+- This document describes the post-deployment validation performed on the Kubernetes Guestbook application and its monitoring infrastructure.
+- It includes Kubernetes resource health checks, Redis replication testing, application accessibility, and monitoring verification.
+
+## Kubernetes Deployment Validation
+
+- Commands executed:
+
+  `kubectl get namespaces`
+  `kubectl get pods -A`
+  `kubectl get deployments -A`
+  `kubectl get services -A`
+
+- Observed results:
+
+  -  Frontend: 3/3 replicas available
+  -  Redis leader: 1/1 available
+  -  Redis replicas: 2/2 available
+  -  Redis exporter: 1/1 available
+  -  Prometheus, Grafana, Alertmanager, Blackbox Exporter, and supporting monitoring components running
+  -  All listed Pods reported Running with zero restarts
+
+## Redis Replication Validation
+
+- Leader verification:
+  `kubectl -n guestbook exec deployment/redis-leader -- redis-cli INFO replication`
+
+- Observed results:
+
+  - role:master
+  - connected_slaves:2
+  - slave0:state=online
+  - slave1:state=online
+
+- Replica verification:
+  `kubectl -n guestbook exec deployment/redis-replica -- redis-cli INFO replication`
+
+- Observed results:
+
+  - role:slave
+  - master_host:redis-leader
+  - master_port:6379
+  - master_link_status:up
+  - slave_read_only:1
+
+## Data replication test
+
+- A test key was written to the Redis leader:
+  `kubectl -n guestbook exec deployment/redis-leader -- redis-cli SET sre-test "replication-working"`
+- The key was successfully retrieved from both Redis replica Pods.
+
+## Guestbook Frontend Validation
+
+- Command: `kubectl -n guestbook port-forward svc/frontend 8080:80`
+- URL: http://localhost:8080
+- Observed results: Guestbook webpage loaded successfully.
+
+## Prometheus Monitoring Validation
+
+- Command: `kubectl -n monitoring port-forward svc/observability-kube-prometh-prometheus 9090:9090`
+- Metrics to verify:
+  - up
+  - redis_up
+  - redis_connected_clients
+  - redis_connected_slaves
+  - probe_success
+  - probe_duration_seconds
+
+## Grafana Dashboard Validation
+
+- Command: `kubectl -n monitoring port-forward svc/observability-grafana 3000:80`
+- Dashboard: `Guestbook SRE Overview`
+- Panels configured:
+  - Frontend HTTP availability
+  - Frontend HTTP probe duration
+  - Redis exporter health
+  - Redis connected clients
+
+## Troubleshooting reference
+
+- `ImagePullBackOff` - kubectl describe pod; check image manifest, registry, architecture; replace outdated v3 image
+- `Pods Running but form does not persist` -	Check frontend Redis hostname/env settings, browser Network requests, PHP errors
+- `Redis replica reports role:master` -	Set redis-server args --replicaof redis-leader 6379; rerun pulumi up
+- `Prometheus port-forward says service not found` - Run kubectl -n monitoring get svc; use actual Prometheus Service name
+- `Grafana panels show No data` -	Check Prometheus targets, ServiceMonitor/Probe discovery, query labels, datasource, scrape endpoints
+- `localhost port unavailable` - Check port-forward terminal, choose alternate local port, verify service and Pods
+- `Pulumi update fails readiness`- kubectl get events -A --sort-by=.lastTimestamp; kubectl describe deployment; inspect logs
